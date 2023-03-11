@@ -30,6 +30,23 @@ if __name__ == "__main__":
     WOFF2_FONT="skia_use_freetype_woff2=true"
     ENABLE_FONT="true"
     ENABLE_EMBEDDED_FONT="true"
+    TO_GENERATE_EMBEDDED_FONT = True
+    # if ENABLE_EMBEDDED_FONT you need to compile your project with generated cpp file: skia/src/fonts/NotoMono-Regular.ttf.cpp
+    if TO_GENERATE_EMBEDDED_FONT:
+        if not os.path.exists("src/fonts/NotoMono-Regular.ttf.cpp"):
+            os.system("python tools/embed_resources.py --name SK_EMBEDDED_FONTS --input modules/canvaskit/fonts/NotoMono-Regular.ttf --output src/fonts/NotoMono-Regular.ttf.cpp")
+    else:
+        if os.path.exists("src/fonts/NotoMono-Regular.ttf.cpp"):
+            os.remove("src/fonts/NotoMono-Regular.ttf.cpp")
+    ###### no_font + no_embedded_font
+    # GN_FONT+="skia_enable_fontmgr_custom_embedded=false skia_enable_fontmgr_custom_empty=false "
+    # GN_FONT+="skia_fontmgr_factory=\":fontmgr_empty_factory\""
+    ##### no_embedded_font
+    # GN_FONT+="skia_enable_fontmgr_custom_embedded=false skia_enable_fontmgr_custom_empty=false "
+    # GN_FONT+="skia_fontmgr_factory=\":fontmgr_empty_factory\""
+    ###### font + embedded_font
+    GN_FONT+="skia_enable_fontmgr_custom_embedded=true skia_enable_fontmgr_custom_empty=false "
+    GN_FONT+="skia_fontmgr_factory=\":fontmgr_custom_embedded_factory\""
     ENABLE_ALIAS_FONT="true"
     LEGACY_DRAW_VERTICES="false"
     DEBUGGER_ENABLED="false"
